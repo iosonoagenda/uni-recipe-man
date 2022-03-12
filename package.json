@@ -1,6 +1,6 @@
 {
   "name": "uni-recipe-man",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "main": "main.js",
   "description": "Universal recipe manager",
   "repository": {
@@ -81,11 +81,12 @@
       "category": "public.app-category.utilities"
     },
     "linux": {
-      "synopsis": "${description}",
+      "icon": "build/icon.png",
+      "synopsis": "Universal Recipe Manager",
       "category": "Utility",
       "mimeTypes": [
-        "urmrecipe",
-        "urmlang"
+        "application/uni.recipes+urmrecipe",
+        "application/uni.langs+urmlang"
       ],
       "target": [
         {
