@@ -81,7 +81,6 @@
       "category": "public.app-category.utilities"
     },
     "linux": {
-      "icon": "build/icon.png",
       "synopsis": "Universal Recipe Manager",
       "category": "Utility",
       "mimeTypes": [
