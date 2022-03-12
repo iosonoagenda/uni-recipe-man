@@ -1,0 +1,33 @@
+* {
+    box-sizing: border-box;
+    text-decoration: none;
+    margin: 0;
+    padding: 0;
+    outline: none;
+}
+
+body {
+    font-size: 0.625em;
+}
+
+hr {
+    background-color: #3333fa;
+    border-color: #3333fa;
+}
+
+code, b, strong {
+    background-color: #333333;
+    color: #fafafa;
+    padding: .1em .2em;
+}
+
+a {
+    color: #3333fa;
+    text-decoration: none;
+}
+
+h1, h2, h3, h4, h5, h6 {
+    margin: .4em 2em;
+    background-color: #33fafa;
+    text-align: center;
+}

@@ -1,0 +1,142 @@
+{
+  "name": "uni-recipe-man",
+  "version": "1.0.0",
+  "main": "main.js",
+  "description": "Universal recipe manager",
+  "repository": {
+    "url": "https://github.com/iosonoagenda/uni-recipe-man",
+    "type": "git"
+  },
+  "author": {
+    "name": "Ettore Ongaro",
+    "email": "ettore9538@gmail.com",
+    "url": "https://github.com/iosonoagenda"
+  },
+  "private": true,
+  "scripts": {
+    "start": "yarn run build && electron .",
+    "help": "yarn run build && electron . --help",
+    "examples": "yarn run build && electron . ./examples/*",
+    "guide": "markdown-pdf -m '{\"html\":true,\"breaks\":true}' -s GUIDE.css GUIDE.md",
+    "dist": "yarn run build && electron-builder -wml",
+    "dist:win": "yarn run build && electron-builder -w",
+    "dist:mac": "yarn run build && electron-builder -m",
+    "dist:lin": "yarn run build && electron-builder -l",
+    "serve": "vue-cli-service serve",
+    "build": "vue-cli-service build",
+    "lint": "vue-cli-service lint"
+  },
+  "build": {
+    "appId": "ch.ongaro.ettore.${name}",
+    "productName": "UniversalRecipeManager",
+    "artifactName": "${productName}-${os}-${arch}.${ext}",
+    "fileAssociations": [
+      {
+        "ext": "urmrecipe",
+        "role": "Editor"
+      },
+      {
+        "ext": "urmlang",
+        "role": "Editor"
+      }
+    ],
+    "directories": {
+      "output": "out"
+    },
+    "files": [
+      "**/*",
+      "build/icon.png",
+      "!**/{out,guide,examples,.run}",
+      "!**/{*.md,*.pdf}",
+      "!**/node_modules/*/{CHANGELOG.md,README.md,README,readme.md,readme}",
+      "!**/node_modules/*/{test,__tests__,tests,powered-test,example,examples}",
+      "!**/node_modules/*.d.ts",
+      "!**/node_modules/.bin",
+      "!**/*.{iml,o,hprof,orig,pyc,pyo,rbc,swp,csproj,sln,xproj}",
+      "!.editorconfig",
+      "!**/._*",
+      "!**/{.DS_Store,.git,.hg,.svn,CVS,RCS,SCCS,.gitignore,.gitattributes}",
+      "!**/{__pycache__,thumbs.db,.flowconfig,.idea,.vs,.nyc_output}",
+      "!**/{appveyor.yml,.travis.yml,circle.yml}",
+      "!**/{npm-debug.log,yarn.lock,.yarn-integrity,.yarn-metadata.json}"
+    ],
+    "win": {
+      "appId": "ch.ongaro.ettore.uni-recipe-man",
+      "target": [
+        {
+          "target": "portable"
+        },
+        {
+          "target": "nsis"
+        }
+      ]
+    },
+    "nsis": {
+      "artifactName": "${productName}-${os}-${arch}-setup.${ext}",
+      "oneClick": false,
+      "allowToChangeInstallationDirectory": true
+    },
+    "mac": {
+      "target": "dmg",
+      "category": "public.app-category.utilities"
+    },
+    "linux": {
+      "synopsis": "${description}",
+      "category": "Utility",
+      "mimeTypes": [
+        "urmrecipe",
+        "urmlang"
+      ],
+      "target": [
+        {
+          "target": "AppImage"
+        },
+        {
+          "target": "deb"
+        },
+        {
+          "target": "rpm"
+        }
+      ]
+    }
+  },
+  "dependencies": {
+    "@octokit/core": "^3.5.1",
+    "core-js": "^3.8.3",
+    "dotenv": "^16.0.0",
+    "fontawesome-free": "^1.0.4",
+    "vue": "^3.2.13",
+    "vue-router": "4"
+  },
+  "devDependencies": {
+    "@babel/core": "^7.12.16",
+    "@babel/eslint-parser": "^7.12.16",
+    "@vue/cli-plugin-babel": "~5.0.0",
+    "@vue/cli-plugin-eslint": "~5.0.0",
+    "@vue/cli-service": "~5.0.0",
+    "electron": "^17.1.0",
+    "electron-builder": "^22.14.13",
+    "eslint": "^7.32.0",
+    "eslint-plugin-vue": "^8.0.3"
+  },
+  "eslintConfig": {
+    "root": true,
+    "env": {
+      "node": true
+    },
+    "extends": [
+      "plugin:vue/vue3-essential",
+      "eslint:recommended"
+    ],
+    "parserOptions": {
+      "parser": "@babel/eslint-parser"
+    },
+    "rules": {}
+  },
+  "browserslist": [
+    "> 1%",
+    "last 2 versions",
+    "not dead",
+    "not ie 11"
+  ]
+}
