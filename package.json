@@ -1,6 +1,6 @@
 {
   "name": "uni-recipe-man",
-  "version": "1.0.1",
+  "version": "1.0.2",
   "main": "main.js",
   "description": "Universal recipe manager",
   "repository": {
@@ -45,7 +45,8 @@
     },
     "files": [
       "**/*",
-      "build/icon.png",
+      "build/*",
+      "!env.example.json",
       "!**/{out,guide,examples,.run}",
       "!**/{*.md,*.pdf}",
       "!**/node_modules/*/{CHANGELOG.md,README.md,README,readme.md,readme}",

@@ -11,7 +11,7 @@ const {Octokit} = require('@octokit/core');
 
 const configDir = path.resolve(homedir(), `.chongett.${name}`);
 const transDir = configDir;
-require('dotenv').config();
+const env = require('./env.json');
 const configs = {
     askWhenDelete: true,
     replaceRecipeIfExists: false,
@@ -87,12 +87,12 @@ const extension = (base = 'recipe', index = 0, baseIndex = 0) => {
 
 const checkUpdates = () => {
     if (configs.checkUpdates) {
-        const octo = new Octokit({auth: process.env.GITHUB_KEY});
+        const octo = new Octokit({auth: env.GITHUB_KEY});
         octo.request(
             'GET /repos/{owner}/{repo}/releases/latest',
             {
                 repo: name,
-                owner: process.env.GITHUB_USER
+                owner: env.GITHUB_USER
             }
         ).then(res => {
             if (!res.data.tag_name.includes(version)) {
