@@ -45,6 +45,7 @@ const trans = {
     langImport: "Import lang file(s)",
     no: "No",
     none: "(none)",
+    noResults: "No results",
     newVersion: "A new version ({0}) was detected. Show site?",
     newerVersion: "Newer version detected!",
     newWindow: "New window",

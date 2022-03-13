@@ -29,7 +29,7 @@
       </li>
       <li v-if="filteredRecipes.length === 0" class="no-results">
         <h3>
-          <span>No results</span>
+          <span>{{ $root.trans.noResults }}</span>
         </h3>
       </li>
     </ul>
