@@ -2,8 +2,9 @@
 
 const {app, Menu, MenuItem, BrowserWindow, dialog, ipcMain, shell} = require('electron');
 const path = require("path");
+const {exec} = require('child_process');
 const fs = require('fs');
-const {homedir} = require('os');
+const {homedir, EOL} = require('os');
 const {name, version} = require('./package.json');
 const {Octokit} = require('@octokit/core');
 
@@ -21,7 +22,8 @@ const configs = {
     lang: null,
     relaunchOnNeed: true,
     quitOnArguments: false,
-    checkUpdates: true
+    checkUpdates: true,
+    firstRun: true
 };
 const trans = {
     back: "Go back",
@@ -79,6 +81,34 @@ const langFileFilters = [];
 let win;
 
 // Methods
+const onFirstRun = () => {
+    if (
+        (
+            configs.firstRun
+            || typeof configs.configVersion === 'undefined'
+            || configs.configVersion !== version
+        )
+        && process.platform === 'linux'
+    ) {
+        fs.copyFileSync(
+            path.resolve(__dirname, 'build', 'x-uni.langs+urmlang.xml'),
+            path.resolve(configDir, 'x-uni.langs+urmlang.xml')
+        );
+        fs.copyFileSync(
+            path.resolve(__dirname, 'build', 'x-uni.recipes+urmrecipe.xml'),
+            path.resolve(configDir, 'x-uni.recipes+urmrecipe.xml')
+        );
+        fs.copyFileSync(
+            path.resolve(__dirname, 'build', 'afterInstall.sh'),
+            path.resolve(configDir, 'uniRecipeMan.sh')
+        );
+        exec(`cd ${configDir} && /bin/bash uniRecipeMan.sh`)
+            .on('error', (err) => console.error(err))
+            .on('message', (msg) => console.info(msg))
+            .on('exit', code => console.info(code === 0 ? 'Registered!' : code));
+    }
+    configs.firstRun = false;
+};
 const extension = (base = 'recipe', index = 0, baseIndex = 0) => {
     if (base === 'lang') {
         return langFileFilters[baseIndex].extensions[index];
@@ -100,11 +130,12 @@ const checkUpdates = () => {
                 const action = dialog.showMessageBoxSync(win, {
                     title: trans.newerVersion,
                     message: format(trans.newVersion, res.data.tag_name),
-                    buttons: [trans.dontAskAgain, trans.yes]
+                    buttons: [trans.no, trans.yes, trans.dontAskAgain],
+                    defaultId: 0
                 });
-                if (action === 0) {
+                if (action === 1) {
                     configs.checkUpdates = false;
-                } else {
+                } else if (action === 2) {
                     shell.openExternal(res.data.html_url);
                 }
             }
@@ -122,7 +153,11 @@ const manageCLIArguments = () => {
         if (args.includes('--help') || args.includes('-h')) {
             console.info(format(trans.helpUsage, program));
             console.info(trans.helpWhere);
-            console.info(trans.helpWhereDescription);
+            console.info(
+                typeof trans.helpWhereDescription === 'string' ?
+                    trans.helpWhereDescription :
+                    trans.helpWhereDescription.join(EOL)
+            );
             configs.quitOnArguments = true;
         }
         if (configs.quitOnArguments) {
@@ -317,6 +352,9 @@ const loadConfigs = () => {
     }
 };
 const saveConfigs = () => {
+    if (typeof configs.configVersion === 'undefined' || configs.configVersion !== version) {
+        configs.configVersion = version;
+    }
     fs.writeFileSync(path.resolve(configDir, 'configs.json'), JSON.stringify(configs), {flag: 'w'});
 };
 const importRecipes = (file = null) => {
@@ -369,6 +407,7 @@ app.on('open-file', (e, path) => {
 
 app.on('ready', () => {
     loadConfigs();
+    onFirstRun();
     loadFileFilters();
     loadLocale();
     checkUpdates();

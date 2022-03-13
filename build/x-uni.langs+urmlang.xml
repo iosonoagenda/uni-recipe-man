@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<mime-info xmlns="http://www.freedesktop.org/standards/shared-mime-info">
+    <!--Created automatically by update-mime-database. DO NOT EDIT!-->
+    <mime-type type="application/uni.langs+urmlang">
+        <comment>UniversalRecipeManager lang</comment>
+        <comment xml:lang="it">Lingua UniversalRecipeManager</comment>
+        <sub-class-of type="text/plain"/>
+        <generic-icon name="uni-recipe-man"/>
+        <glob pattern="*.urmlang"/>
+    </mime-type>
+</mime-info>
