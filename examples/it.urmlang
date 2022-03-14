@@ -21,7 +21,11 @@
   "groupItems": "Raggruppa per oggetti selezionati",
   "helpUsage": "Uso: {0} [FILE...]",
   "helpWhere": "Dove:",
-  "helpWhereDescription": "\tFILE\tlista di file da importare (ovvero *.urmrecipe o *.urmlang)",
+  "helpWhereDescription": [
+    "\tFILE\tlista di file da importare (ovvero *.urmrecipe o *.urmlang)",
+    "\t--help,-h,/h\tmostra questa vista d'aiuto",
+    "\t--version,-v,/v\tmostra la versione dell'app"
+  ],
   "import": "Importa",
   "inputAdd": "Aggiungi un input",
   "inputDelete": "Rimuovi input",

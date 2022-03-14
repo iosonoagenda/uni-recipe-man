@@ -4,6 +4,21 @@
 
 ---
 
+## Contents
+
+1. [Introduction](#introduction)
+2. [After installation](#after-installation)
+    - [Windows](#windows)
+    - [Mac](#mac)
+    - [Linux](#linux)
+3. [Home](#home)
+4. [Create](#create)
+5. [Show](#show)
+6. [Edit](#edit)
+7. [Other features](#other-features)
+
+<div style="page-break-after: always;"></div>
+
 ## Introduction
 
 This guide will cover all views of application.
@@ -11,6 +26,38 @@ This guide will cover all views of application.
 **Note:** Every image has numbers in red circles inside. These numbers are related to list below.
 
 ---
+
+## After installation
+
+### Windows
+
+**Note:** These actions works also for portable edition.
+
+![More info](./guide/00_win_more_info.png "Info")
+
+![Run anyway](./guide/01_win_run_anyway.png "Run")
+
+<div style="page-break-after: always;"></div>
+
+### Mac
+
+![Cancel](./guide/00_mac_cancel.png "Cancel")
+
+![System preferences](./guide/01_mac_system_preferences.png "Preferences")
+
+![Privacy & Security](./guide/02_mac_privacy.png "P&S")
+
+![Open Anyway](./guide/03_mac_open_anyway.png "Open")
+
+![Open](./guide/04_mac_open.png "Open")
+
+## Linux
+
+Run once to apply mime types.
+
+---
+
+<div style="page-break-after: always;"></div>
 
 ## Home
 
@@ -44,6 +91,8 @@ This guide will cover all views of application.
 ***Caution:** These steps aren't needed to generate "not-craftable" items!
 
 ---
+
+<div style="page-break-after: always;"></div>
 
 ## Show
 

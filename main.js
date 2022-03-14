@@ -2,10 +2,10 @@
 
 const {app, Menu, MenuItem, BrowserWindow, dialog, ipcMain, shell} = require('electron');
 const path = require("path");
-const {exec} = require('child_process');
+const {execSync} = require('child_process');
 const fs = require('fs');
 const {homedir, EOL} = require('os');
-const {name, version} = require('./package.json');
+const {name, version, productName} = require('./package.json');
 const {Octokit} = require('@octokit/core');
 
 // Constants
@@ -34,7 +34,11 @@ const trans = {
     groupItems: "Group by given items",
     helpUsage: "Usage: {0} [FILE...]",
     helpWhere: "Where:",
-    helpWhereDescription: "\tFILE\tlist of files to import (either *.urmrecipe or *.urmlang)",
+    helpWhereDescription: [
+        "\tFILE\tlist of files to import (either *.urmrecipe or *.urmlang)",
+        "\t--help,-h,/h\tshow this help page",
+        "\t--version,-v,/v\tshow app version",
+    ],
     import: "Import",
     inputAdd: "Add an input",
     inputDelete: "Delete input",
@@ -88,24 +92,38 @@ const onFirstRun = () => {
             || typeof configs.configVersion === 'undefined'
             || configs.configVersion !== version
         )
-        && process.platform === 'linux'
     ) {
-        fs.copyFileSync(
-            path.resolve(__dirname, 'build', 'x-uni.langs+urmlang.xml'),
-            path.resolve(configDir, 'x-uni.langs+urmlang.xml')
-        );
-        fs.copyFileSync(
-            path.resolve(__dirname, 'build', 'x-uni.recipes+urmrecipe.xml'),
-            path.resolve(configDir, 'x-uni.recipes+urmrecipe.xml')
-        );
-        fs.copyFileSync(
-            path.resolve(__dirname, 'build', 'afterInstall.sh'),
-            path.resolve(configDir, 'uniRecipeMan.sh')
-        );
-        exec(`cd ${configDir} && /bin/bash uniRecipeMan.sh`)
-            .on('error', (err) => console.error(err))
-            .on('message', (msg) => console.info(msg))
-            .on('exit', code => console.info(code === 0 ? 'Registered!' : code));
+        if (process.platform === 'linux') {
+            fs.copyFileSync(
+                path.resolve(__dirname, 'build', 'x-uni.langs+urmlang.xml'),
+                path.resolve(configDir, 'x-uni.langs+urmlang.xml')
+            );
+            fs.copyFileSync(
+                path.resolve(__dirname, 'build', 'x-uni.recipes+urmrecipe.xml'),
+                path.resolve(configDir, 'x-uni.recipes+urmrecipe.xml')
+            );
+            fs.copyFileSync(
+                path.resolve(__dirname, 'build', 'afterInstall.sh'),
+                path.resolve(configDir, 'uniRecipeMan.sh')
+            );
+            execSync('/bin/bash uniRecipeMan.sh', {cwd: configDir.toString()});
+        } else if (process.platform === 'win32') {
+            execSync(`setx ${name} ${path.resolve(__dirname)}`);
+            execSync(`setx PATH "%PATH%;${path.resolve(__dirname)}"`);
+        } else if (process.platform === 'darwin') {
+            const linkPath = path.resolve('/', 'usr', 'local', 'bin', name);
+            fs.writeFileSync(
+                linkPath,
+                [
+                    '#!/bin/bash',
+                    `${path.resolve(
+                        '/', 'Applications', `${productName}.app`, 'Contents', 'MacOS', productName
+                    )} $@`
+                ].join(EOL),
+                {flag: 'w'}
+            );
+            fs.chmodSync(linkPath, 0o755);
+        }
     }
     configs.firstRun = false;
 };
@@ -150,7 +168,7 @@ const manageCLIArguments = () => {
         configs.relaunchOnNeed = false;
         configs.quitOnArguments = importRecipes(args) > 0 || configs.quitOnArguments;
         configs.quitOnArguments = importLangs(args) > 0 || configs.quitOnArguments;
-        if (args.includes('--help') || args.includes('-h')) {
+        if (args.includes('--help') || args.includes('-h') || args.includes('/h')) {
             console.info(format(trans.helpUsage, program));
             console.info(trans.helpWhere);
             console.info(
@@ -158,6 +176,10 @@ const manageCLIArguments = () => {
                     trans.helpWhereDescription :
                     trans.helpWhereDescription.join(EOL)
             );
+            configs.quitOnArguments = true;
+        }
+        if (args.includes('--version') || args.includes('-v') || args.includes('/v')) {
+            console.info(productName, `v${version}`);
             configs.quitOnArguments = true;
         }
         if (configs.quitOnArguments) {

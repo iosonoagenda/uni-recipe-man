@@ -31,3 +31,10 @@ h1, h2, h3, h4, h5, h6 {
     background-color: #33fafa;
     text-align: center;
 }
+
+img {
+    display: block;
+    margin: 0 auto;
+    max-width: 100vw;
+    max-height: 5cm;
+}

@@ -1,6 +1,7 @@
 {
   "name": "uni-recipe-man",
-  "version": "1.0.4",
+  "version": "1.0.5",
+  "productName": "UniversalRecipeManager",
   "main": "main.js",
   "description": "Universal recipe manager",
   "repository": {
