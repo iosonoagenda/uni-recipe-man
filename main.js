@@ -108,8 +108,23 @@ const onFirstRun = () => {
             );
             execSync('/bin/bash uniRecipeMan.sh', {cwd: configDir.toString()});
         } else if (process.platform === 'win32') {
-            execSync(`setx ${name} ${path.resolve(__dirname)}`);
-            execSync(`setx PATH "%PATH%;${path.resolve(__dirname)}"`);
+            try {
+                const dest = path.resolve(configDir, 'uniRecipeMan.ps1');
+                fs.copyFileSync(path.resolve(__dirname, 'build', 'afterInstall.ps1'), dest);
+                const command = fs.readFileSync(dest).toString();
+                fs.rmSync(dest);
+                execSync(command, {
+                    shell: 'powershell',
+                    env: {APP_NAME: name, APP_PATH: path.resolve(__dirname, '..', '..')}
+                });
+            } catch (e) {
+                dialog.showMessageBoxSync(win, {
+                    title: 'Error',
+                    message: e.message,
+                    buttons: ['Ok']
+                })
+                app.quit();
+            }
         } else if (process.platform === 'darwin') {
             const linkPath = path.resolve('/', 'usr', 'local', 'bin', name);
             fs.writeFileSync(
